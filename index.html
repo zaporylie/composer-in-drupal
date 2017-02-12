@@ -1,0 +1,307 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<section data-markdown>
+						<script type="text/template">
+							# Composer for Drupal
+
+							<img src="https://pantheon.io/sites/default/files/composer-vs-drush-make_0.png">
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## What is Composer?
+
+							> Composer is a tool for dependency management in PHP. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you.
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Ok, but I don't care about libraries...
+
+							*Anything can be library <!-- .element: class="fragment" data-fragment-index="0" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							- standalone PHP library (i.e. PHPSpreadshead)
+							- Drupal theme <!-- .element: class="fragment" data-fragment-index="2" -->
+							- Drupal module <!-- .element: class="fragment" data-fragment-index="3" -->
+							- Drush command <!-- .element: class="fragment" data-fragment-index="4" -->
+							- Drupal core <!-- .element: class="fragment" data-fragment-index="5" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## But why not using Drush and Libraries API...
+
+							... like caveman do. <!-- .element: class="fragment" data-fragment-index="1" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							1. You already use Composer in project you're currently working on (Monolog). <!-- .element: class="fragment" data-fragment-index="1" -->
+							2. It's written in PHP - something you already know. <!-- .element: class="fragment" data-fragment-index="2" -->
+							3. There's no escape from Composer for D8 projects ("getting off the island"). <!-- .element: class="fragment" data-fragment-index="3" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							- commit dependency declaration instead of code <!-- .element: class="fragment" data-fragment-index="1" -->
+							- keep only project related code in project repository <!-- .element: class="fragment" data-fragment-index="2" -->
+							- reuse modules, themes, libs... <!-- .element: class="fragment" data-fragment-index="3" -->
+							- ...to specific SHA (composer.lock)<!-- .element: class="fragment" data-fragment-index="4" -->
+							- avoid dependency conflicts <!-- .element: class="fragment" data-fragment-index="5" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							- use different repositories seamlessly <!-- .element: class="fragment" data-fragment-index="1" -->
+							- semver compatible version strib <!-- .element: class="fragment" data-fragment-index="2" -->
+							- standardized workflow for D7 and D8 <!-- .element: class="fragment" data-fragment-index="3" -->
+							- use local version of drush/drupal console etc. <!-- .element: class="fragment" data-fragment-index="4" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							- drupal
+							- composer.json
+							- composer.lock
+							- .gitignore
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							- sites
+								- all
+									- modules
+										- custom
+											- project_utils
+									- themes
+										- custom
+											- project_theme
+								- default
+									- default.settings.php
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							- sites
+								- all
+									- modules
+										- contrib
+										- nymedia
+									- themes
+										- contrib
+										- nymedia
+							- modules
+							- misc
+							- includes
+							- index.php
+						</script>
+					</section>
+				</section>
+				<section>
+					<section data-markdown>
+						<script type="text/template">
+							## Composer vs Drush
+
+							What does it mean in practice?  <!-- .element: class="fragment" data-fragment-index="1" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							instead of
+							```bash
+							$ drush dl rules
+							```
+							use
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+							```bash
+							$ composer require drupal/rules
+							```
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							instead of
+							```bash
+							$ drush up rules
+							```
+							use
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+							```bash
+							$ composer update drupal/rules --with-dependencies
+							```
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							instead of
+							```bash
+							$ drush composer-manager install
+							```
+							use
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+							```bash
+							$ composer install
+							```
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							instead of
+							```bash
+							$ drush make
+							```
+							use
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+							```bash
+							$ composer create-project --repository https://packages.nymedia.no --stability dev nymediaas/unstore
+							```
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+						</script>
+					</section>
+				</section>
+				<section>
+					<section data-markdown>
+						<script type="text/template">
+							imagine...
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							<!-- .slide: data-background-image="http://i.giphy.com/mcLpVkaKWHOOk.gif" -->
+							```bash
+							$ import
+							```
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+						</script>
+					</section>
+					<section data-markdown>
+						## Custom commands
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							```bash
+							$ composer import
+							```
+							alternative to:
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+							```bash
+							$ drush cim
+							```
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+							or
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+							```bash
+							$ drush fra
+							```
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							```bash
+							$ composer export
+							```
+							alternative to:
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+							```bash
+							$ drush cex
+							```
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+							or
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+							```bash
+							$ drush fua
+							```
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							```bash
+							$ composer build
+							```
+							i.e.
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+							```json
+							"build": [
+								"./vendor/bin/drush --root=$(pwd)/drupal cc drush",
+								"@composer install --no-dev --prefer-dist",
+								"./vendor/bin/drush --root=$(pwd)/drupal @sites features-revert-all -y",
+								"./vendor/bin/drush --root=$(pwd)/drupal @sites updatedb -y",
+								"./vendor/bin/drush --root=$(pwd)/drupal @sites l10n-update-refresh -y",
+								"./vendor/bin/drush --root=$(pwd)/drupal @sites l10n-update -y",
+								"./vendor/bin/drush --root=$(pwd)/drupal @sites cache-clear all -y"
+							]
+							```
+							<!-- .element: class="fragment" data-fragment-index="1" -->
+						</script>
+					</section>
+				</section>
+				<section>
+					<section data-background-image="http://i.giphy.com/mGj3SVN7xbPQ4.gif">
+
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Intrigued?
+
+							### Composer in Drupal
+							Ny Media Office
+							Tuesday, February 14, 2017
+						</script>
+					</section>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
