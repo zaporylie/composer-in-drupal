@@ -12,6 +12,15 @@
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
 
+		<style>
+			.reveal div.more {
+				position: fixed;
+				left: 0;
+				bottom: 0;
+				font-size: .5em;
+			}
+		</style>
+
 		<!-- Printing and PDF exports -->
 		<script>
 			var link = document.createElement( 'link' );
@@ -27,9 +36,7 @@
 				<section>
 					<section data-markdown>
 						<script type="text/template">
-							# Composer for Drupal
-
-							<img src="https://pantheon.io/sites/default/files/composer-vs-drush-make_0.png">
+							# Composer in Drupal
 						</script>
 					</section>
 					<section data-markdown>
@@ -42,14 +49,13 @@
 					</section>
 					<section data-markdown>
 						<script type="text/template">
-							## Ok, but I don't care about libraries...
-
-							*Anything can be library <!-- .element: class="fragment" data-fragment-index="0" -->
 						</script>
 					</section>
 					<section data-markdown>
 						<script type="text/template">
-							- standalone PHP library (i.e. PHPSpreadshead)
+							## What do you mean by library?
+
+							- standalone PHP library (i.e. PHPSpreadshead) <!-- .element: class="fragment" data-fragment-index="1" -->
 							- Drupal theme <!-- .element: class="fragment" data-fragment-index="2" -->
 							- Drupal module <!-- .element: class="fragment" data-fragment-index="3" -->
 							- Drush command <!-- .element: class="fragment" data-fragment-index="4" -->
@@ -58,22 +64,24 @@
 					</section>
 					<section data-markdown>
 						<script type="text/template">
-							## But why not using Drush and Libraries API...
-
-							... like caveman do. <!-- .element: class="fragment" data-fragment-index="1" -->
+							1. Many Drupal modules already use Composer (i.e. Monolog, Payment Gateways, Sparkpost, etc) <!-- .element: class="fragment" data-fragment-index="1" -->
+							1. It's written in PHP - something you already know. <!-- .element: class="fragment" data-fragment-index="2" -->
+							1. Drupal 8 core requires Composer libraries ("getting off the island" - Guzzle, Symfony Routing). <!-- .element: class="fragment" data-fragment-index="3" -->
+						</script>
+					</section>
+				</section>
+				<section>
+					<section data-markdown>
+						<script type="text/template">
+							## Let's talk about
+							## pros and cons <!-- .element: class="fragment" data-fragment-index="1" -->
 						</script>
 					</section>
 					<section data-markdown>
 						<script type="text/template">
-							1. You already use Composer in project you're currently working on (Monolog). <!-- .element: class="fragment" data-fragment-index="1" -->
-							2. It's written in PHP - something you already know. <!-- .element: class="fragment" data-fragment-index="2" -->
-							3. There's no escape from Composer for D8 projects ("getting off the island"). <!-- .element: class="fragment" data-fragment-index="3" -->
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-							- commit dependency declaration instead of code <!-- .element: class="fragment" data-fragment-index="1" -->
-							- keep only project related code in project repository <!-- .element: class="fragment" data-fragment-index="2" -->
+							### Pros:
+							- dependency declaration instead of library codebase <!-- .element: class="fragment" data-fragment-index="1" -->
+							- project repository has only relevant code <!-- .element: class="fragment" data-fragment-index="2" -->
 							- reuse modules, themes, libs... <!-- .element: class="fragment" data-fragment-index="3" -->
 							- ...to specific SHA (composer.lock)<!-- .element: class="fragment" data-fragment-index="4" -->
 							- avoid dependency conflicts <!-- .element: class="fragment" data-fragment-index="5" -->
@@ -87,43 +95,24 @@
 							- use local version of drush/drupal console etc. <!-- .element: class="fragment" data-fragment-index="4" -->
 						</script>
 					</section>
+				</section>
+				<section>
 					<section data-markdown>
 						<script type="text/template">
-							- drupal
-							- composer.json
-							- composer.lock
-							- .gitignore
+							## That is great but where fo find libraries?
 						</script>
 					</section>
 					<section data-markdown>
 						<script type="text/template">
-							- sites
-								- all
-									- modules
-										- custom
-											- project_utils
-									- themes
-										- custom
-											- project_theme
-								- default
-									- default.settings.php
+							### packagist.org
 						</script>
 					</section>
-					<section data-markdown>
-						<script type="text/template">
-							- sites
-								- all
-									- modules
-										- contrib
-										- nymedia
-									- themes
-										- contrib
-										- nymedia
-							- modules
-							- misc
-							- includes
-							- index.php
-						</script>
+					<section>
+						<p class="fragment strike">packagist.drupal-composer.org</p>
+						<img src="https://cdn4.iconfinder.com/data/icons/action-hand-drawn-basic-sticker/64/arrow-down-128.png" style="background:none; border:none; box-shadow:none;" class="fragment">
+						<p class="fragment">packages.drupal.org/7</p>
+						<p class="fragment">packages.drupal.org/8</p>
+						<div class="more"><a href="https://www.drupal.org/docs/develop/using-composer/using-composer-to-manage-drupal-site-dependencies">Read more</a></div>
 					</section>
 				</section>
 				<section>
@@ -134,118 +123,138 @@
 							What does it mean in practice?  <!-- .element: class="fragment" data-fragment-index="1" -->
 						</script>
 					</section>
-					<section data-markdown>
-						<script type="text/template">
-							instead of
-							```bash
-							$ drush dl rules
-							```
-							use
-							<!-- .element: class="fragment" data-fragment-index="1" -->
-							```bash
-							$ composer require drupal/rules
-							```
-							<!-- .element: class="fragment" data-fragment-index="1" -->
-						</script>
+					<section>
+						<h3>Composer dependency in D7</h3>
+						<p>
+							<code>
+								$ drush composer-manager install
+							</code>
+						</p>
+						<img src="https://cdn4.iconfinder.com/data/icons/action-hand-drawn-basic-sticker/64/arrow-down-128.png" style="background:none; border:none; box-shadow:none;" class="fragment">
+						<p class="fragment">
+							<code>
+								$ composer install
+							</code>
+						</p>
 					</section>
-					<section data-markdown>
-						<script type="text/template">
-							instead of
-							```bash
-							$ drush up rules
-							```
-							use
-							<!-- .element: class="fragment" data-fragment-index="1" -->
-							```bash
-							$ composer update drupal/rules --with-dependencies
-							```
-							<!-- .element: class="fragment" data-fragment-index="1" -->
-						</script>
+					<section>
+						<p>
+							<code>
+								$ drush dl rules
+							</code>
+						</p>
+						<img src="https://cdn4.iconfinder.com/data/icons/action-hand-drawn-basic-sticker/64/arrow-down-128.png" style="background:none; border:none; box-shadow:none;" class="fragment">
+						<p class="fragment">
+							<code>
+								$ composer require drupal/rules
+							</code>
+						</p>
 					</section>
-					<section data-markdown>
-						<script type="text/template">
-							instead of
-							```bash
-							$ drush composer-manager install
-							```
-							use
-							<!-- .element: class="fragment" data-fragment-index="1" -->
-							```bash
-							$ composer install
-							```
-							<!-- .element: class="fragment" data-fragment-index="1" -->
-						</script>
+					<section>
+						<p>
+							<code>
+								$ drush up rules
+							</code>
+						</p>
+						<img src="https://cdn4.iconfinder.com/data/icons/action-hand-drawn-basic-sticker/64/arrow-down-128.png" style="background:none; border:none; box-shadow:none;" class="fragment">
+						<p class="fragment">
+							<code>
+								$ composer update drupal/rules --with-dependencies
+							</code>
+						</p>
 					</section>
-					<section data-markdown>
-						<script type="text/template">
-							instead of
-							```bash
-							$ drush make
-							```
-							use
-							<!-- .element: class="fragment" data-fragment-index="1" -->
-							```bash
-							$ composer create-project --repository https://packages.nymedia.no --stability dev nymediaas/unstore
-							```
-							<!-- .element: class="fragment" data-fragment-index="1" -->
-						</script>
+					<section>
+						<h2>Distribution?</h2>
+						<p>
+							<code>
+								$ drush make
+							</code>
+						</p>
+						<img src="https://cdn4.iconfinder.com/data/icons/action-hand-drawn-basic-sticker/64/arrow-down-128.png" style="background:none; border:none; box-shadow:none;" class="fragment">
+						<p class="fragment">
+							<code>
+								$ composer create-project drupal/commerce
+							</code>
+						</p>
 					</section>
 				</section>
 				<section>
 					<section data-markdown>
-						<script type="text/template">
-							imagine...
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-							<!-- .slide: data-background-image="http://i.giphy.com/mcLpVkaKWHOOk.gif" -->
-							```bash
-							$ import
-							```
-							<!-- .element: class="fragment" data-fragment-index="1" -->
-						</script>
-					</section>
-					<section data-markdown>
 						## Custom commands
 					</section>
-					<section data-markdown>
-						<script type="text/template">
-							```bash
-							$ composer import
-							```
-							alternative to:
-							<!-- .element: class="fragment" data-fragment-index="1" -->
-							```bash
-							$ drush cim
-							```
-							<!-- .element: class="fragment" data-fragment-index="1" -->
-							or
-							<!-- .element: class="fragment" data-fragment-index="1" -->
-							```bash
-							$ drush fra
-							```
-							<!-- .element: class="fragment" data-fragment-index="1" -->
-						</script>
+					<section>
+						<pre>
+"scripts": {
+	"test-style": "./vendor/bin/phpcs"
+}
+						</pre>
 					</section>
-					<section data-markdown>
-						<script type="text/template">
-							```bash
-							$ composer export
-							```
-							alternative to:
-							<!-- .element: class="fragment" data-fragment-index="1" -->
-							```bash
-							$ drush cex
-							```
-							<!-- .element: class="fragment" data-fragment-index="1" -->
-							or
-							<!-- .element: class="fragment" data-fragment-index="1" -->
-							```bash
-							$ drush fua
-							```
-							<!-- .element: class="fragment" data-fragment-index="1" -->
-						</script>
+					<section>
+						<pre>
+"scripts": {
+	"test": [
+		"./vendor/bin/phpcs",
+		"./vendor/bin/behat"
+	]
+}
+						</pre>
+					</section>
+					<section>
+						<pre style="white-space: pre-line">
+"scripts": {
+	"drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
+}
+						</pre>
+					</section>
+					<section>
+						<p>
+							<code>
+								$ composer import
+							</code>
+						</p>
+						<img src="https://cdn4.iconfinder.com/data/icons/action-hand-drawn-basic-sticker/64/arrow-down-128.png" style="background:none; border:none; box-shadow:none;" class="fragment">
+						<p class="fragment">
+							<code>
+								$ drush cim // Drupal 8
+							</code>
+						</p>
+						<p class="fragment">
+							<code>
+								$ drush fra // Drupal 7
+							</code>
+						</p>
+					</section>
+					<section>
+						<p>
+							<code>
+								$ composer export
+							</code>
+						</p>
+						<img src="https://cdn4.iconfinder.com/data/icons/action-hand-drawn-basic-sticker/64/arrow-down-128.png" style="background:none; border:none; box-shadow:none;" class="fragment">
+						<p class="fragment">
+							<code>
+								$ drush cex // Drupal 8
+							</code>
+						</p>
+						<p class="fragment">
+							<code>
+								$ drush fua // Drupal 7
+							</code>
+						</p>
+					</section>
+					<section>
+						<p>
+							<code>
+								$ composer test
+							</code>
+						</p>
+						<img src="https://cdn4.iconfinder.com/data/icons/action-hand-drawn-basic-sticker/64/arrow-down-128.png" style="background:none; border:none; box-shadow:none;" class="fragment">
+						<p class="fragment">
+							<code>
+								$ ./vendor/bin/phpcs<br>
+								$ ./vendor/bin/behat
+							</code>
+						</p>
 					</section>
 					<section data-markdown>
 						<script type="text/template">
@@ -275,11 +284,7 @@
 					</section>
 					<section data-markdown>
 						<script type="text/template">
-							## Intrigued?
-
-							### Composer in Drupal
-							Ny Media Office
-							Tuesday, February 14, 2017
+							## Questions?
 						</script>
 					</section>
 				</section>
