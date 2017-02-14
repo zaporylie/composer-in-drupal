@@ -19,6 +19,14 @@
 				bottom: 0;
 				font-size: .5em;
 			}
+			.reveal .slides section .fragment.red {
+				color: #ff2c2d; }
+
+			.reveal .slides section .fragment.green {
+				color: #17ff2e; }
+
+			.reveal .slides section .fragment.blue {
+				color: #1b91ff; }
 		</style>
 
 		<!-- Printing and PDF exports -->
@@ -37,36 +45,97 @@
 					<section data-markdown>
 						<script type="text/template">
 							# Composer in Drupal
+							by Jakub Piasecki
 						</script>
 					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Agenda
+
+							- about Composer
+							- pros & cons
+							- repositories
+							- Drush vs Composer
+							- custom commands
+							- composer extensions
+							- q&a
+						</script>
+					</section>
+				</section>
+				<section>
 					<section data-markdown>
 						<script type="text/template">
 							## What is Composer?
-
-							> Composer is a tool for dependency management in PHP. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you.
-							<!-- .element: class="fragment" data-fragment-index="1" -->
 						</script>
+					</section>
+					<section data-background-image="https://media.giphy.com/media/7x5dS1pvhl0Ig/giphy.gif">
+					</section>
+					<section>
+						<blockquote>Composer is a tool for dependency management in PHP. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you.</blockquote>
+						<!-- .element: class="fragment" data-fragment-index="1" -->
+						<div class="more">https://getcomposer.org</div>
 					</section>
 					<section data-markdown>
 						<script type="text/template">
+							## composer.json
+
+							```json
+							{
+								"name": "drupal/commerce",
+								"type": "drupal-module",
+								"license": "GPL-2.0+",
+								"require": {
+									"drupal/core": "~8.2",
+								},
+								"minimum-stability": "dev"
+							}
+							```
+						</script>
+					</section>
+					<section>
+						<code class="fragment highlight-blue" data-fragment-index="1">drupal</code><code>/</code><code class="fragment highlight-current-red"  data-fragment-index="2">commerce</code>
+						<br>
+						<code class="fragment blue" data-fragment-index="1">vendor name</code>
+						<code class="fragment red" data-fragment-index="2">project name</code>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## composer.lock
+
+							```json
+							{
+								"_readme": [
+									"This file locks the dependencies of your project to a known state",
+									"Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+									"This file is @generated automatically"
+								],
+								"hash": "4112b63a5cdd9028c1fe389e38f341a0",
+								"content-hash": "8fb2d8826b05413373de415bc323a091",
+								"packages": [
+									{
+									"name": "clue/stream-filter",
+									...
+							}
+							```
 						</script>
 					</section>
 					<section data-markdown>
 						<script type="text/template">
 							## What do you mean by library?
 
-							- standalone PHP library (i.e. PHPSpreadshead) <!-- .element: class="fragment" data-fragment-index="1" -->
-							- Drupal theme <!-- .element: class="fragment" data-fragment-index="2" -->
-							- Drupal module <!-- .element: class="fragment" data-fragment-index="3" -->
-							- Drush command <!-- .element: class="fragment" data-fragment-index="4" -->
-							- Drupal core <!-- .element: class="fragment" data-fragment-index="5" -->
+							`"type": "library"` <!-- .element: class="fragment" data-fragment-index="0" -->
+
+							standalone PHP package (i.e. PHPSpreadshead, Monolog, Sparkpost) <!-- .element: class="fragment" data-fragment-index="1" -->
 						</script>
 					</section>
 					<section data-markdown>
 						<script type="text/template">
-							1. Many Drupal modules already use Composer (i.e. Monolog, Payment Gateways, Sparkpost, etc) <!-- .element: class="fragment" data-fragment-index="1" -->
-							1. It's written in PHP - something you already know. <!-- .element: class="fragment" data-fragment-index="2" -->
-							1. Drupal 8 core requires Composer libraries ("getting off the island" - Guzzle, Symfony Routing). <!-- .element: class="fragment" data-fragment-index="3" -->
+							## ...and...
+							- `drupal-module` <!-- .element: class="fragment" data-fragment-index="0" -->
+							- `drupal-theme` <!-- .element: class="fragment" data-fragment-index="2" -->
+							- `drupal-library` <!-- .element: class="fragment" data-fragment-index="3" -->
+							- `drupal-drush` <!-- .element: class="fragment" data-fragment-index="4" -->
+							- `drupal-core` <!-- .element: class="fragment" data-fragment-index="5" -->
 						</script>
 					</section>
 				</section>
@@ -77,30 +146,57 @@
 							## pros and cons <!-- .element: class="fragment" data-fragment-index="1" -->
 						</script>
 					</section>
+					<section data-background-image="http://www.pipefy.com/wp-content/uploads/2016/03/pros-and-cons-process-automation.gif">
+					</section>
 					<section data-markdown>
 						<script type="text/template">
-							### Pros:
-							- dependency declaration instead of library codebase <!-- .element: class="fragment" data-fragment-index="1" -->
-							- project repository has only relevant code <!-- .element: class="fragment" data-fragment-index="2" -->
-							- reuse modules, themes, libs... <!-- .element: class="fragment" data-fragment-index="3" -->
-							- ...to specific SHA (composer.lock)<!-- .element: class="fragment" data-fragment-index="4" -->
-							- avoid dependency conflicts <!-- .element: class="fragment" data-fragment-index="5" -->
+							### Pros (1/2):
+
+							- lighter repos <!-- .element: class="fragment" data-fragment-index="1" -->
+							- common vendor and autoloader outside of drupal root <!-- .element: class="fragment" data-fragment-index="2" -->
+							- simplified usage of composer packages in projects <!-- .element: class="fragment" data-fragment-index="3" -->
+							- common workflow for d7 and d8 projects <!-- .element: class="fragment" data-fragment-index="4" -->
+							- simplified test automation <!-- .element: class="fragment" data-fragment-index="5" -->
 						</script>
 					</section>
 					<section data-markdown>
 						<script type="text/template">
-							- use different repositories seamlessly <!-- .element: class="fragment" data-fragment-index="1" -->
-							- semver compatible version strib <!-- .element: class="fragment" data-fragment-index="2" -->
-							- standardized workflow for D7 and D8 <!-- .element: class="fragment" data-fragment-index="3" -->
-							- use local version of drush/drupal console etc. <!-- .element: class="fragment" data-fragment-index="4" -->
+							### Pros (2/2):
+
+							- easier upgrades <!-- .element: class="fragment" data-fragment-index="6" -->
+							- easier patches <!-- .element: class="fragment" data-fragment-index="7" -->
+							- local version of Drush / Console<!-- .element: class="fragment" data-fragment-index="8" -->
+							- composer.lock - always same version of dependencies (to commit SHA) <!-- .element: class="fragment" data-fragment-index="9" -->
+							- composer.lock - all dependency definitions in one place <!-- .element: class="fragment" data-fragment-index="10" -->
+							- fast! <!-- .element: class="fragment" data-fragment-index="11" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							### Cons:
+
+							- something new to learn <!-- .element: class="fragment" data-fragment-index="1" -->
+							- can't use multiple version of the same composer package (i.e.phpexcel 7 and 8 in the same time) <!-- .element: class="fragment" data-fragment-index="2" -->
+							- can't download modules with drush dl <!-- .element: class="fragment" data-fragment-index="3" -->
+							- one more step to deploy project changes: git pull && composer install <!-- .element: class="fragment" data-fragment-index="4" -->
+							- slow! <!-- .element: class="fragment" data-fragment-index="5" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## inevitable process
+							- Many Drupal modules already use Composer (i.e. Monolog, Payment Gateways, Sparkpost, etc) <!-- .element: class="fragment" data-fragment-index="1" -->
+							- Drupal 8 core requires Composer libraries ("getting off the island" - Guzzle, Symfony Routing). <!-- .element: class="fragment" data-fragment-index="2" -->
 						</script>
 					</section>
 				</section>
 				<section>
 					<section data-markdown>
 						<script type="text/template">
-							## That is great but where fo find libraries?
+							## That is great but where do I find libraries?
 						</script>
+					</section>
+					<section data-background-image="https://media.giphy.com/media/3o7TKMgPt6n2nEXoMU/giphy.gif">
 					</section>
 					<section data-markdown>
 						<script type="text/template">
@@ -108,11 +204,21 @@
 						</script>
 					</section>
 					<section>
+						<p>But is that all?</p>
+						<p class="fragment">No!</p>
+					</section>
+					<section>
 						<p class="fragment strike">packagist.drupal-composer.org</p>
 						<img src="https://cdn4.iconfinder.com/data/icons/action-hand-drawn-basic-sticker/64/arrow-down-128.png" style="background:none; border:none; box-shadow:none;" class="fragment">
 						<p class="fragment">packages.drupal.org/7</p>
 						<p class="fragment">packages.drupal.org/8</p>
 						<div class="more"><a href="https://www.drupal.org/docs/develop/using-composer/using-composer-to-manage-drupal-site-dependencies">Read more</a></div>
+					</section>
+					<section>
+						<h3>Private packages?</h3>
+						<p class="fragment">packagist.com</p>
+						<p class="fragment">Toran Proxy</p>
+						<p class="fragment">Satis</p>
 					</section>
 				</section>
 				<section>
@@ -123,6 +229,7 @@
 							What does it mean in practice?  <!-- .element: class="fragment" data-fragment-index="1" -->
 						</script>
 					</section>
+					<section data-background-image="https://cdn-images-1.medium.com/max/800/1*V5k7BJLMSP6fhpWFitdpVQ.gif"></section>
 					<section>
 						<h3>Composer dependency in D7</h3>
 						<p>
@@ -138,6 +245,9 @@
 						</p>
 					</section>
 					<section>
+						<img data-src="img/composer-install.gif">
+					</section>
+					<section>
 						<p>
 							<code>
 								$ drush dl rules
@@ -149,6 +259,9 @@
 								$ composer require drupal/rules
 							</code>
 						</p>
+					</section>
+					<section>
+						<img data-src="img/composer-require.gif">
 					</section>
 					<section>
 						<p>
@@ -164,6 +277,9 @@
 						</p>
 					</section>
 					<section>
+						<img data-src="https://i.stack.imgur.com/PDAEX.gif">
+					</section>
+					<section>
 						<h2>Distribution?</h2>
 						<p>
 							<code>
@@ -177,34 +293,40 @@
 							</code>
 						</p>
 					</section>
+					<section>
+						<img data-src="img/composer-create-project.gif">
+						<div class="more">https://github.com/drupal-composer/drupal-project</div>
+					</section>
 				</section>
 				<section>
 					<section data-markdown>
 						## Custom commands
 					</section>
+					<section data-background-image="https://camo.githubusercontent.com/ab9f73d3c76ab41be8d9e1008bf25e8de86b7309/68747470733a2f2f63646e2e7261776769742e636f6d2f7765636f64656d6f72652f77702d636f6d706f7365722d636f6e6669672f6d61737465722f636f6d706f7365722d72756e2d7363726970742e676966">
+					</section>
 					<section>
-						<pre>
+						<pre><code>
 "scripts": {
 	"test-style": "./vendor/bin/phpcs"
 }
-						</pre>
+						</code></pre>
 					</section>
 					<section>
-						<pre>
+						<pre><code>
 "scripts": {
 	"test": [
 		"./vendor/bin/phpcs",
 		"./vendor/bin/behat"
 	]
 }
-						</pre>
+						</code></pre>
 					</section>
 					<section>
-						<pre style="white-space: pre-line">
+						<pre style="white-space: pre-wrap"><code>
 "scripts": {
 	"drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
 }
-						</pre>
+						</code></pre>
 					</section>
 					<section>
 						<p>
@@ -256,6 +378,9 @@
 							</code>
 						</p>
 					</section>
+					<section>
+						<img data-src="img/composer-test.gif">
+					</section>
 					<section data-markdown>
 						<script type="text/template">
 							```bash
@@ -276,6 +401,93 @@
 							```
 							<!-- .element: class="fragment" data-fragment-index="1" -->
 						</script>
+					</section>
+				</section>
+				<section>
+					<section><h2>Composer extensions</h2></section>
+					<section data-background-image="https://media.giphy.com/media/AZNGWlnUOyHx6/giphy.gif"></section>
+					<section>
+						<pre><code>
+{
+	"name": "drupal-composer/drupal-project",
+	"extra": {
+		...
+	}
+}
+						</code></pre>
+					</section>
+					<section>
+						<h3>wikimedia/composer-merge-plugin</h3>
+						<pre class="fragment"><code>
+{
+    "require": {
+        "wikimedia/composer-merge-plugin": "dev-master"
+    },
+    "extra": {
+        "merge-plugin": {
+            "include": [
+                "composer.local.json",
+                "drupal/modules/custom/*/composer.json"
+            ],
+            "require": [
+                "drupal/modules/custom/very-important/composer.json"
+            ],
+            "recurse": true,
+            "replace": false,
+            "merge-dev": true,
+            "merge-extra": false,
+            "merge-extra-deep": false
+        }
+    }
+}
+						</code></pre>
+					</section>
+					<section>
+						<h3>composer/installers</h3>
+						<pre class="fragment"><code>
+{
+    "extra": {
+        "installer-paths": {
+			"drupal/": ["type:drupal-core"],
+			"drupal/sites/all/modules/contrib/{$name}/": ["type:drupal-module"],
+			"drupal/sites/all/themes/contrib/{$name}/": ["type:drupal-theme"],
+			"drupal/sites/all/libraries/{$name}/": ["type:drupal-library"],
+			"drupal/sites/all/drush/{$name}/": ["type:drupal-drush"],
+			"drupal/profiles/{$name}/": ["type:drupal-profile"]
+		}
+    }
+}
+						</code></pre>
+					</section>
+					<section>
+						<h3>cweagans/composer-patches</h3>
+						<pre class="fragment"><code>
+{
+    "extra": {
+		"patches": {
+			"drupal/geofield": {
+				"Field handler for Migrate module": "https://www.drupal.org/files/issues/geofield-field_handler_for_migrate-1411836-36.patch"
+			},
+			"drupal/entity": {
+				"Notice : Undefined property: stdClass::$nid in node_access()": "https://www.drupal.org/files/issues/op_update_should_be_create-2807275-2.patch",
+				"Missing data values EntityMetadataWrapperException is obtuse": "https://www.drupal.org/files/issues/entity-data_value_exception_verbose-2482795-8.patch"
+			}
+		},
+    }
+}
+						</code></pre>
+					</section>
+					<section>
+						<h3>derhasi/composer-preserve-paths</h3>
+						<pre class="fragment"><code>
+{
+	"extra": {
+		"preserve-paths": [
+			"drupal/sites"
+		]
+	}
+}
+						</code></pre>
 					</section>
 				</section>
 				<section>
